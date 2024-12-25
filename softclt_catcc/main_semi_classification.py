@@ -9,6 +9,7 @@ import torch
 from dataloader.dataloader import *
 from models.TC import TC
 from models.model import base_Model
+from softclt_catcc.trainer.train_utils import gen_pseudo_labels
 from trainer.trainer import *
 from utils import _calc_metrics, copy_Files
 from utils import _logger, set_requires_grad

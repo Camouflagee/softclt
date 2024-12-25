@@ -1,6 +1,8 @@
 import os
 import sys
 
+from softclt_catcc.trainer.train_utils import model_train, model_evaluate
+
 sys.path.append("..")
 import torch
 import torch.nn as nn
