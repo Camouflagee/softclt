@@ -3,22 +3,26 @@ import tqdm
 
 import numpy as np
 import pandas as pd
-from fastdtw import fastdtw
+
+from sklearn.metrics import euclidean_distances
+from torch.nn.functional import cosine_similarity
 from tslearn.metrics import dtw, dtw_path,gak
 
 import torch
 from torch.utils.data import Dataset
 
+from softclt_ts2vec.utils_distance_matrix import tam
 from .augmentations import DataTransform
 from sklearn.preprocessing import MinMaxScaler
-
+from fastdtw import fastdtw
 def get_DTW(UTS_tr):
     N = len(UTS_tr)
     dist_mat = np.zeros((N,N))
     for i in tqdm.tqdm(range(N)):
         for j in range(N):
             if i>j:
-                dist = dtw(UTS_tr[i].reshape(-1,1), UTS_tr[j].reshape(-1,1))
+                # dist = fastdtw(UTS_tr[i].reshape(-1,1), UTS_tr[j].reshape(-1,1))[0] # fastdtw
+                dist = dtw(UTS_tr[i].reshape(-1,1), UTS_tr[j].reshape(-1,1)) # dtw
                 dist_mat[i,j] = dist
                 dist_mat[j,i] = dist
             elif i==j:
@@ -86,7 +90,6 @@ def get_EUC(MTS_tr):
     return euclidean_distances(MTS_tr)
 
 def save_sim_mat(X_tr, min_ = 0, max_ = 1, multivariate=False, type_='DTW'):
-    N = dist_mat.shape[0]
     if multivariate:
         assert type=='DTW'
         dist_mat = get_MDTW(X_tr)
@@ -101,7 +104,7 @@ def save_sim_mat(X_tr, min_ = 0, max_ = 1, multivariate=False, type_='DTW'):
             dist_mat = get_EUC(X_tr)
         elif type_=='GAK':
             dist_mat = get_GAK(X_tr)
-        
+    N = dist_mat.shape[0]
     # (1) distance matrix
     diag_indices = np.diag_indices(N)
     mask = np.ones(dist_mat.shape, dtype=bool)

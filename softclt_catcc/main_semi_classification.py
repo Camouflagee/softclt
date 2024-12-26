@@ -31,7 +31,7 @@ parser.add_argument('--selected_dataset',           default='HAR',              
 parser.add_argument('--data_path',                  default=r'data/',           type=str,   help='Path containing dataset')
 parser.add_argument('--data_perc',                  default=1,                  type=int,   help='data percentage')
 parser.add_argument('--logs_save_dir',              default='experiments_logs', type=str,   help='saving directory')
-parser.add_argument('--device',                     default='7',           type=str,   help='cpu or cuda')
+parser.add_argument('--device',                     default='cuda',           type=str,   help='cpu or cuda')
 parser.add_argument('--home_path',                  default=home_dir,           type=str,   help='Project home directory')
 
 ############################################################################################################################################
@@ -52,7 +52,7 @@ parser.add_argument('--dist_metric', type=str, default='DTW')
 ############################################################################################################################################
 args = parser.parse_args()
 
-device = torch.device(f'cuda:{args.device}')
+device = torch.device(f'{args.device}')
 #experiment_description = f"{args.selected_dataset}_experiment"
 data_type = args.selected_dataset
 training_mode = args.training_mode
